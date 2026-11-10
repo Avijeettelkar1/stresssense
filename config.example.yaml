@@ -1,0 +1,25 @@
+# Copy this to config.local.yaml and edit for YOUR machine.
+# config.local.yaml is git-ignored, so paths never clash between teammates.
+
+seed: 42
+
+data:
+  # WESAD root: the folder that contains S2/, S3/, ... each with a .pkl file.
+  wesad_root: "CHANGE_ME/path/to/WESAD"
+
+paths:
+  # Real hand-off files (produced locally; these dirs are git-ignored).
+  windows: "artifacts/windows.parquet"
+  scores: "artifacts/scores.csv"
+  decisions: "artifacts/decisions.csv"
+  # Committed mocks — B and C build against these until the real files exist.
+  mock_scores: "mocks/scores.csv"
+  mock_decisions: "mocks/decisions.csv"
+
+label:
+  # Week-1 decision (open question). Default: stress vs everything else.
+  positive_class: "stress"
+  negatives: ["baseline", "amusement", "meditation"]
+
+# Week-1 decision (open question).
+sensor_configs: ["wrist", "chest", "all"]

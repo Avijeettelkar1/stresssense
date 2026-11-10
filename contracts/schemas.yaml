@@ -1,0 +1,40 @@
+# Machine-readable contracts. Validated by src/common/io.py and tests/test_contracts.py.
+# Changing a column requires a 3-way PR (see contracts/README.md).
+
+windows:
+  format: parquet
+  producer: A
+  consumer: B
+  required_columns:
+    subject_id: string     # e.g. "S2"
+    window_id: int         # 0-based index within a subject
+    t_start: float         # window start time, seconds
+    phase: string          # baseline | stress | amusement | meditation | ...
+    label: int             # 1 = stress, 0 = not
+  notes: >
+    Plus one column per feature (including movement/accelerometer features).
+    Feature column names are agreed in week one.
+
+scores:
+  format: csv
+  producer: A
+  consumer: B
+  required_columns:
+    subject_id: string
+    window_id: int
+    split: string          # "loso" or "random"
+    sensor_config: string  # "wrist" | "chest" | "all"
+    label: int             # 1 = stress, 0 = not
+    score: float           # predicted probability of stress, 0..1
+
+decisions:
+  format: csv
+  producer: B
+  consumer: C
+  required_columns:
+    subject_id: string
+    window_id: int
+    decision: string       # "act" | "watch" | "none"
+    adjusted_score: float  # score after the personal baseline adjustment
+    threshold: float       # gate threshold used
+    nudge_rate: float      # running share of windows that triggered "act"

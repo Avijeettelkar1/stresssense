@@ -1,0 +1,26 @@
+# Pinned for reproducibility — the numbers must match on all three machines.
+# If anyone bumps a version, do it in a PR so the whole team moves together.
+
+numpy==1.26.4
+pandas==2.2.2
+scipy==1.13.1
+scikit-learn==1.5.1
+pyarrow==16.1.0          # parquet (windows.parquet)
+pyyaml==6.0.1            # config + contracts/schemas.yaml
+
+# signal processing for physiological features (HR, EDA, TEMP, RESP, ACC)
+neurokit2==0.2.7
+
+# model (optional alternative to sklearn estimators)
+lightgbm==4.3.0
+
+# figures (C owns the shared style)
+matplotlib==3.9.0
+seaborn==0.13.2
+
+# recommender prototype (C)
+streamlit==1.35.0
+
+# dev
+jupyterlab==4.2.0
+pytest==8.2.0
