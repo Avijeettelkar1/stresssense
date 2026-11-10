@@ -1,7 +1,9 @@
 """Recommender prototype. Owner: C.
 
-Consumes decisions.csv and turns each `act`/`watch`/`none` into a non-clinical well-being
-suggestion. The intervention is SIMULATED — we do not claim clinical effectiveness.
+Consumes B's decisions.csv and turns each act / watch / none into a non-clinical well-being
+suggestion, optionally refined by the adaptive survey's answers.
+
+The intervention is SIMULATED — we do not claim clinical effectiveness.
 """
 from __future__ import annotations
 
@@ -16,6 +18,25 @@ INTERVENTIONS = [
 
 
 def recommend(decision: str, context: dict | None = None) -> str:
-    """TODO(C): pick a suggestion. 'none'/'watch' usually -> 'no intervention'; 'act' -> a nudge
-    possibly refined by the adaptive survey answers."""
-    raise NotImplementedError
+    """Pick a suggestion for one window.
+
+    `watch`/`none` -> no intervention (the system chooses not to act).
+    `act`          -> a nudge, refined by survey context when present:
+        context keys (all optional): minutes_available (int), can_leave_desk (bool),
+        prefers (one of INTERVENTIONS).
+    """
+    context = context or {}
+    if decision != "act":
+        return "no intervention"
+
+    if context.get("prefers") in INTERVENTIONS:
+        return context["prefers"]
+
+    minutes = context.get("minutes_available")
+    if minutes is not None and minutes < 2:
+        return "breathing exercise"
+    if context.get("can_leave_desk"):
+        return "brief walk"
+    if minutes is not None and minutes >= 10:
+        return "mindfulness exercise"
+    return "short break"
