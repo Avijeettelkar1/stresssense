@@ -72,6 +72,23 @@ python scripts/make_mocks.py
 pytest
 ```
 
+### Workstream A pipeline (data → model → scores)
+
+Once `data.wesad_root` points at your WESAD download:
+
+```bash
+python scripts/run_pipeline.py --stage all          # data → scores → metrics
+python scripts/run_pipeline.py --stage data         # → artifacts/windows.parquet  (A→B)
+python scripts/run_pipeline.py --stage scores       # LOSO + random → artifacts/scores.csv  (A→B)
+python scripts/run_pipeline.py --stage metrics      # RQ1/RQ2 tables → reports/
+python scripts/run_pipeline.py --stage data --subjects S2 S3   # quick subset
+```
+
+Stage map: `src/data_model/load_wesad.py` → `preprocess.py` (+ `features.py`) → `windows.parquet`;
+`classifier.py` + `evaluate.py` → `scores.csv` (LOSO is the headline, random is the contrast);
+`evaluate.per_subject_metrics` → the worst-user / disparity table (RQ2). Windowing and model
+settings live under `windows:` and `model:` in `config.example.yaml`.
+
 ## Milestones
 
 | # | Date | Done when |

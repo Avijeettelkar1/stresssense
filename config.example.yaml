@@ -23,3 +23,14 @@ label:
 
 # Week-1 decision (open question).
 sensor_configs: ["wrist", "chest", "all"]
+
+# Windowing for feature extraction (Workstream A).
+windows:
+  window_sec: 60.0   # window length in seconds
+  overlap: 0.5       # fractional overlap between consecutive windows (0.5 = 30s step)
+  min_purity: 0.9    # keep a window only if >= this fraction shares one label
+
+# Classifier (Workstream A).
+model:
+  type: "rf"         # "rf" (RandomForest, no extra deps) or "lightgbm"
+  n_estimators: 200
