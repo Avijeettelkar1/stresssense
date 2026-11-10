@@ -48,7 +48,7 @@ def stage_metrics(args, cfg):
     per_subject = per_subject_metrics(scores)
     summary = summarize(per_subject)
 
-    out = ROOT / "reports"
+    out = ROOT / "artifacts"
     out.mkdir(exist_ok=True)
     per_subject.to_csv(out / "metrics_per_subject.csv", index=False)
     summary.to_csv(out / "metrics_summary.csv", index=False)

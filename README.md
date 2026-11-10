@@ -80,7 +80,7 @@ Once `data.wesad_root` points at your WESAD download:
 python scripts/run_pipeline.py --stage all          # data → scores → metrics
 python scripts/run_pipeline.py --stage data         # → artifacts/windows.parquet  (A→B)
 python scripts/run_pipeline.py --stage scores       # LOSO + random → artifacts/scores.csv  (A→B)
-python scripts/run_pipeline.py --stage metrics      # RQ1/RQ2 tables → reports/
+python scripts/run_pipeline.py --stage metrics      # RQ1/RQ2 tables → artifacts/
 python scripts/run_pipeline.py --stage data --subjects S2 S3   # quick subset
 ```
 
