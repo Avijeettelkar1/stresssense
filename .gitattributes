@@ -1,0 +1,4 @@
+# Normalise line endings across the team (A on Windows, others may not be).
+* text=auto eol=lf
+*.png binary
+*.parquet binary
