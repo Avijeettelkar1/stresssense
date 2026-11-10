@@ -6,6 +6,7 @@ is a probability of stress. Swappable via config['model']['type'] ('rf' default,
 from __future__ import annotations
 
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
@@ -27,4 +28,9 @@ def build_model(cfg: dict | None = None, seed: int = 42):
             class_weight="balanced", n_jobs=-1,
         )
 
-    return Pipeline([("scaler", StandardScaler()), ("clf", estimator)])
+    # Impute first: physio features can be NaN when a window is too short/flat for an estimator.
+    return Pipeline([
+        ("imputer", SimpleImputer(strategy="median")),
+        ("scaler", StandardScaler()),
+        ("clf", estimator),
+    ])

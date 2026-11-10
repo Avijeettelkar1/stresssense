@@ -30,6 +30,11 @@ windows:
   overlap: 0.5       # fractional overlap between consecutive windows (0.5 = 30s step)
   min_purity: 0.9    # keep a window only if >= this fraction shares one label
 
+# Feature extraction (Workstream A).
+features:
+  physio: true       # HR/HRV, EDA tonic/phasic, respiration via neurokit2
+                     # (slower; set false for quick statistics-only runs)
+
 # Classifier (Workstream A).
 model:
   type: "rf"         # "rf" (RandomForest, no extra deps) or "lightgbm"
