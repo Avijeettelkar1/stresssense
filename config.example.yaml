@@ -8,10 +8,11 @@ data:
   wesad_root: "CHANGE_ME/path/to/WESAD"
 
 paths:
-  # Real hand-off files (produced locally; these dirs are git-ignored).
-  windows: "artifacts/windows.parquet"
-  scores: "artifacts/scores.csv"
-  decisions: "artifacts/decisions.csv"
+  # Real hand-off files live in handoff/ (tracked in git, small < 1 MB) so the
+  # owner commits them and the next workstream pulls them. A->B->C contracts.
+  windows: "handoff/windows.parquet"
+  scores: "handoff/scores.csv"
+  decisions: "handoff/decisions.csv"
   # Committed mocks — B and C build against these until the real files exist.
   mock_scores: "mocks/scores.csv"
   mock_decisions: "mocks/decisions.csv"
