@@ -9,6 +9,7 @@ from __future__ import annotations
 import numpy as np
 
 from src.data_model.load_wesad import iter_channels
+from src.data_model.physio import PHYSIO_FUNCS
 
 SENSOR_PREFIXES = {
     "wrist": ("wrist_",),
@@ -48,8 +49,12 @@ def _stats(seg: np.ndarray) -> dict:
     }
 
 
-def extract_window(raw: dict, t_start: float, win_sec: float) -> dict:
-    """Compute all features for the window [t_start, t_start + win_sec) seconds."""
+def extract_window(raw: dict, t_start: float, win_sec: float, use_physio: bool = True) -> dict:
+    """Compute all features for the window [t_start, t_start + win_sec) seconds.
+
+    Always emits the generic statistics; when `use_physio` is set, adds physiological features
+    (HR/HRV, EDA tonic/phasic, respiration) for the channels that support them.
+    """
     feats: dict[str, float] = {}
     for loc, chan, fs, arr in iter_channels(raw):
         i0 = int(round(t_start * fs))
@@ -57,4 +62,7 @@ def extract_window(raw: dict, t_start: float, win_sec: float) -> dict:
         seg = arr[i0:i1]
         for stat, value in _stats(seg).items():
             feats[f"{loc}_{chan}_{stat}"] = value
+        if use_physio and (loc, chan) in PHYSIO_FUNCS:
+            for name, value in PHYSIO_FUNCS[(loc, chan)](seg, fs).items():
+                feats[f"{loc}_{chan}_{name}"] = value
     return feats

@@ -36,6 +36,7 @@ def make_windows(subject_id: str, raw: dict, cfg: dict | None = None) -> pd.Data
     wc = _window_cfg(cfg)
     win, overlap, min_purity = wc["window_sec"], wc["overlap"], wc["min_purity"]
     step = win * (1.0 - overlap)
+    use_physio = bool((cfg.get("features", {}) or {}).get("physio", True))
 
     lab = labels(raw)
     duration = len(lab) / LABEL_FS
@@ -55,7 +56,7 @@ def make_windows(subject_id: str, raw: dict, cfg: dict | None = None) -> pd.Data
                 "phase": phase,
                 "label": int(phase == positive),
             }
-            row.update(F.extract_window(raw, t, win))
+            row.update(F.extract_window(raw, t, win, use_physio=use_physio))
             rows.append(row)
             window_id += 1
         t += step
