@@ -18,9 +18,9 @@ paths:
   mock_decisions: "mocks/decisions.csv"
 
 label:
-  # Week-1 decision (open question). Default: stress vs everything else.
+  # Stress vs everything else: windows in this phase get label 1; baseline, amusement and
+  # meditation all get label 0.
   positive_class: "stress"
-  negatives: ["baseline", "amusement", "meditation"]
 
 # Week-1 decision (open question).
 sensor_configs: ["wrist", "chest", "all"]
@@ -38,5 +38,4 @@ features:
 
 # Classifier (Workstream A).
 model:
-  type: "rf"         # "rf" (RandomForest, no extra deps) or "lightgbm"
-  n_estimators: 200
+  n_estimators: 200  # number of trees in the random forest
