@@ -1,9 +1,9 @@
 """Workstream A pipeline runner.
 
 Stages:
-  data    : WESAD -> features -> artifacts/windows.parquet   (contract: A->B)
-  scores  : windows.parquet -> LOSO + random eval -> artifacts/scores.csv  (contract: A->B)
-  metrics : scores.csv -> per-subject + summary tables in reports/  (RQ1, RQ2)
+  data    : WESAD -> features -> handoff/windows.parquet   (contract: A->B)
+  scores  : windows.parquet -> LOSO + random eval -> handoff/scores.csv  (contract: A->B)
+  metrics : scores.csv -> per-subject + summary tables in artifacts/  (RQ1, RQ2)
   all     : data -> scores -> metrics
 
 Usage:

@@ -37,28 +37,35 @@ wearable signals (WESAD)
 
 - **One owner per folder.** Nobody edits another person's `src/` folder.
 - **Contracts are fixed in [`contracts/`](contracts/).** Changing a column needs all three of us to agree in a PR.
-- **Data stays out of git.** `data/` and large outputs are git-ignored; set your own path in `config.local.yaml`.
+- **Data stays out of git.** Raw WESAD (`data/`) and local outputs (`artifacts/`) are git-ignored;
+  set your own data path in `config.local.yaml`. Only the small hand-off files in `handoff/` are committed.
 - **Reproducible.** Fixed seeds (`src/common/config.py::set_seeds`) and pinned `requirements.txt`.
 - **One review per PR into `main`,** rotating, so everyone sees the whole project.
 - Start commit messages with your letter, e.g. `a: add window features`.
 
 ## Hand-off files (the contracts)
 
-| File | A → B → C | Lives (real) | Mock (committed) |
+| File | A → B → C | Lives (real, committed) | Mock (committed) |
 | --- | --- | --- | --- |
-| `windows.parquet` | A → B | `artifacts/` (git-ignored) | — |
-| `scores.csv` | A → B | `artifacts/` (git-ignored) | [`mocks/scores.csv`](mocks/scores.csv) |
-| `decisions.csv` | B → C | `artifacts/` (git-ignored) | [`mocks/decisions.csv`](mocks/decisions.csv) |
+| `windows.parquet` | A → B | [`handoff/`](handoff/) | — |
+| `scores.csv` | A → B | [`handoff/`](handoff/) | [`mocks/scores.csv`](mocks/scores.csv) |
+| `decisions.csv` | B → C | [`handoff/`](handoff/) | [`mocks/decisions.csv`](mocks/decisions.csv) |
 
 B and C build against the **mocks** first, then switch to the real files when they arrive.
 Column definitions: [`contracts/`](contracts/).
 
 ## Getting started
 
+Use **Python 3.11, 3.12 or 3.13**. `requirements.txt` pins the exact versions of the Colab run that
+produced `handoff/scores.csv`. Re-training on a different computer (e.g. a Mac) can shift a few
+scores by one or two tree votes (≤ 0.02) because of tiny floating-point differences between
+processors; the committed `handoff/` files are the official numbers.
+
 ```bash
 # 1. environment
-python -m venv .venv
-.venv\Scripts\activate          # Windows (PowerShell: .venv\Scripts\Activate.ps1)
+python3.12 -m venv .venv         # Windows: py -3.12 -m venv .venv
+source .venv/bin/activate        # macOS / Linux
+.venv\Scripts\activate           # Windows (PowerShell: .venv\Scripts\Activate.ps1)
 pip install -r requirements.txt
 
 # 2. local config (git-ignored) — point it at your WESAD download
@@ -78,8 +85,8 @@ Once `data.wesad_root` points at your WESAD download:
 
 ```bash
 python scripts/run_pipeline.py --stage all          # data → scores → metrics
-python scripts/run_pipeline.py --stage data         # → artifacts/windows.parquet  (A→B)
-python scripts/run_pipeline.py --stage scores       # LOSO + random → artifacts/scores.csv  (A→B)
+python scripts/run_pipeline.py --stage data         # → handoff/windows.parquet  (A→B)
+python scripts/run_pipeline.py --stage scores       # LOSO + random → handoff/scores.csv  (A→B)
 python scripts/run_pipeline.py --stage metrics      # RQ1/RQ2 tables → artifacts/
 python scripts/run_pipeline.py --stage data --subjects S2 S3   # quick subset
 ```

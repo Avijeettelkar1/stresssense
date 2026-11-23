@@ -1,8 +1,6 @@
 # --- Data & large outputs (never commit) ---
 data/
 artifacts/
-outputs/
-reports/figures/*.png
 
 # --- Local, per-machine config ---
 config.local.yaml
@@ -21,10 +19,6 @@ env/
 .pytest_cache/
 .coverage
 htmlcov/
-
-# --- MLflow / experiment tracking (if used) ---
-mlruns/
-mlflow.db
 
 # --- OS / editors ---
 .DS_Store
